@@ -1,0 +1,2 @@
+# VentiAI
+A web based AI app where on ecan vent their frustation and get emotional support from Artificial intelligence tailored to oneself.
