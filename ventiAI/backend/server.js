@@ -6,7 +6,8 @@ const app = express();
 const ventingApp = new VentingApp();
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files from frontend/public
+app.use(express.static(path.join(__dirname, '../frontend/public')));
 
 app.post('/api/vent', (req, res) => {
     const { message } = req.body;
@@ -53,8 +54,10 @@ app.delete('/api/clear', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Venting App running at http://localhost:${PORT}`);
+const HOST = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
+
+app.listen(PORT, HOST, () => {
+    console.log(`Venting App running on ${HOST}:${PORT}`);
 });
 
 module.exports = app;

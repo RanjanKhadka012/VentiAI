@@ -2,12 +2,15 @@
   "name": "venting-app",
   "version": "1.0.0",
   "description": "A sentiment analysis-based venting application",
-  "main": "src/VentingApp.js",
+  "main": "backend/server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "test": "jest",
-    "dev": "node examples/demo.js",
-    "start": "node server.js",
-    "server": "node server.js"
+    "dev": "node backend/examples/demo.js",
+    "start": "node backend/server.js",
+    "server": "node backend/server.js"
   },
   "keywords": [
     "sentiment-analysis",

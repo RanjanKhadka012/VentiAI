@@ -1,0 +1,15 @@
+.git
+.gitignore
+.env.example
+.DS_Store
+node_modules
+*.log
+.vscode
+.idea
+__tests__
+*.test.js
+assignments
+pseudocode.js
+README.md
+.eslintrc
+.prettierrc
