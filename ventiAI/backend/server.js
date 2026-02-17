@@ -5,6 +5,21 @@ const VentingApp = require('./src/VentingApp');
 const app = express();
 const ventingApp = new VentingApp();
 
+// CORS configuration
+const cors = require('cors');
+const corsOptions = {
+    origin: [
+        'http://localhost:3000',
+        'http://localhost:5173',
+        'http://localhost:8000',
+        'https://venti-ai.vercel.app'
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type']
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 // Serve static files from frontend/public
 app.use(express.static(path.join(__dirname, '../frontend/public')));
