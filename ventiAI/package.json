@@ -1,0 +1,27 @@
+{
+  "name": "venting-app",
+  "version": "1.0.0",
+  "description": "A sentiment analysis-based venting application",
+  "main": "src/VentingApp.js",
+  "scripts": {
+    "test": "jest",
+    "dev": "node examples/demo.js",
+    "start": "node server.js",
+    "server": "node server.js"
+  },
+  "keywords": [
+    "sentiment-analysis",
+    "emotion-detection",
+    "mental-health",
+    "venting",
+    "chatbot"
+  ],
+  "author": "khadk046",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.0.0"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
