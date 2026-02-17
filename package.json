@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "dev": "node examples/demo.js",
-    "start": "node examples/demo.js"
+    "start": "node server.js",
+    "server": "node server.js"
   },
   "keywords": [
     "sentiment-analysis",
@@ -19,5 +20,8 @@
   "license": "MIT",
   "devDependencies": {
     "jest": "^29.0.0"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
   }
 }

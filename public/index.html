@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VentiAI - Venting & Emotional Support</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .chat-box {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        textarea {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1em;
+            resize: vertical;
+            min-height: 120px;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-send {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            align-self: flex-end;
+        }
+
+        .btn-send:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-send:active {
+            transform: translateY(0);
+        }
+
+        .response-section {
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .response-section.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .emotion-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .emotion-sadness {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .emotion-stress {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .emotion-anger {
+            background-color: #c0392b;
+            color: white;
+        }
+
+        .emotion-happiness {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .emotion-neutral {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .user-message {
+            background: #f0f0f0;
+            margin-left: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .ai-message {
+            background: #e8f4f8;
+            margin-right: 20px;
+            border-left: 4px solid #2ecc71;
+        }
+
+        .stats-section {
+            display: none;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .stats-section.show {
+            display: block;
+        }
+
+        .stats-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .stat-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+            font-size: 0.9em;
+            padding: 8px 15px;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .spinner {
+            border: 3px solid #f0f0f0;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>VentiAI</h1>
+            <p>A safe space to express yourself and get understanding responses</p>
+        </div>
+
+        <div class="content">
+            <div class="error" id="error"></div>
+
+            <div class="chat-box">
+                <div class="input-section">
+                    <label for="message" style="font-weight: 600; color: #333; margin-bottom: 5px;">What's on your mind?</label>
+                    <textarea id="message" placeholder="Share your thoughts, feelings, or concerns... I'm here to listen."></textarea>
+                    <button class="btn-send" onclick="sendMessage()">Send</button>
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                </div>
+
+                <div id="messages"></div>
+            </div>
+
+            <div class="stats-section" id="stats">
+                <div class="stats-title">Your Conversation Stats</div>
+                <div class="stats-grid" id="statsGrid"></div>
+                <div class="btn-group">
+                    <button class="btn-secondary" onclick="loadHistory()">View History</button>
+                    <button class="btn-secondary" onclick="clearHistory()">Clear All</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const messageInput = document.getElementById('message');
+        const messagesDiv = document.getElementById('messages');
+        const statsDiv = document.getElementById('stats');
+        const statsGrid = document.getElementById('statsGrid');
+        const loading = document.getElementById('loading');
+        const errorDiv = document.getElementById('error');
+
+        function showError(message) {
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+            setTimeout(() => errorDiv.classList.remove('show'), 5000);
+        }
+
+        function showLoading(show) {
+            loading.style.display = show ? 'block' : 'none';
+        }
+
+        function displayMessage(text, type) {
+            const messageEl = document.createElement('div');
+            messageEl.className = `message ${type === 'user' ? 'user-message' : 'ai-message'}`;
+            messageEl.textContent = text;
+            messagesDiv.appendChild(messageEl);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function displayEmotion(emotion) {
+            const emotionBadge = document.createElement('div');
+            emotionBadge.className = `emotion-badge emotion-${emotion}`;
+            emotionBadge.textContent = emotion.charAt(0).toUpperCase() + emotion.slice(1);
+            messagesDiv.appendChild(emotionBadge);
+        }
+
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+
+            if (!message) {
+                showError('Please enter a message');
+                return;
+            }
+
+            displayMessage(message, 'user');
+            messageInput.value = '';
+            showLoading(true);
+
+            try {
+                const response = await fetch('/api/vent', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message })
+                });
+
+                if (!response.ok) throw new Error('Failed to process message');
+
+                const data = await response.json();
+
+                if (data.success) {
+                    displayEmotion(data.tone);
+                    displayMessage(data.response, 'ai');
+                    updateStats();
+                } else {
+                    showError('Error processing message');
+                }
+            } catch (error) {
+                showError('Connection error. Please try again.');
+                console.error('Error:', error);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function updateStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const stats = await response.json();
+
+                if (stats.totalConversations > 0) {
+                    statsDiv.classList.add('show');
+                    statsGrid.innerHTML = `
+                        <div class="stat-item">
+                            <div class="stat-label">Total Vents</div>
+                            <div class="stat-value">${stats.totalConversations}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">😢 Sadness</div>
+                            <div class="stat-value">${stats.emotionBreakdown.sadness}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">😰 Stress</div>
+                            <div class="stat-value">${stats.emotionBreakdown.stress}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">😠 Anger</div>
+                            <div class="stat-value">${stats.emotionBreakdown.anger}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">😊 Happy</div>
+                            <div class="stat-value">${stats.emotionBreakdown.happiness}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">😐 Neutral</div>
+                            <div class="stat-value">${stats.emotionBreakdown.neutral}</div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error updating stats:', error);
+            }
+        }
+
+        async function loadHistory() {
+            try {
+                const response = await fetch('/api/history');
+                const history = await response.json();
+
+                if (history.length === 0) {
+                    alert('No conversation history yet.');
+                    return;
+                }
+
+                let historyText = 'Your Conversation History:\n\n';
+                history.forEach((record, index) => {
+                    historyText += `${index + 1}. [${record.emotion.toUpperCase()}] ${record.text}\n`;
+                    historyText += `   Response: ${record.feedback}\n\n`;
+                });
+
+                alert(historyText);
+            } catch (error) {
+                showError('Error loading history');
+            }
+        }
+
+        async function clearHistory() {
+            if (!confirm('Are you sure you want to clear all conversations?')) return;
+
+            try {
+                const response = await fetch('/api/clear', { method: 'DELETE' });
+                const data = await response.json();
+
+                if (data.success) {
+                    messagesDiv.innerHTML = '';
+                    statsDiv.classList.remove('show');
+                    showError('History cleared successfully');
+                }
+            } catch (error) {
+                showError('Error clearing history');
+            }
+        }
+
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        updateStats();
+    </script>
+</body>
+</html>
