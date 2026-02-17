@@ -302,7 +302,11 @@
                 <div class="input-section">
                     <label for="message" style="font-weight: 600; color: #333; margin-bottom: 5px;">What's on your mind?</label>
                     <textarea id="message" placeholder="Share your thoughts, feelings, or concerns... I'm here to listen."></textarea>
-                    <button class="btn-send" onclick="sendMessage()">Send</button>
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <button class="btn-send" onclick="sendMessage()">Send</button>
+                        <button class="btn-send" id="voiceBtn" style="flex: 0 0 auto;">🎤 Voice</button>
+                        <button class="btn-send" id="toggleVoice" style="flex: 0 0 auto; background: #95a5a6;">🔊 Voice Off</button>
+                    </div>
                 </div>
 
                 <div class="loading" id="loading">
@@ -330,6 +334,69 @@
         const statsGrid = document.getElementById('statsGrid');
         const loading = document.getElementById('loading');
         const errorDiv = document.getElementById('error');
+        const voiceBtn = document.getElementById('voiceBtn');
+        const toggleVoiceBtn = document.getElementById('toggleVoice');
+
+        // Speech Recognition and Synthesis
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        const synth = window.speechSynthesis;
+        let voiceEnabled = false;
+        let isListening = false;
+
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+
+        recognition.onstart = () => {
+            isListening = true;
+            voiceBtn.style.background = '#e74c3c';
+            voiceBtn.textContent = '🎤 Listening...';
+        };
+
+        recognition.onresult = (event) => {
+            let transcript = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                transcript += event.results[i][0].transcript;
+            }
+            messageInput.value = transcript;
+        };
+
+        recognition.onend = () => {
+            isListening = false;
+            voiceBtn.style.background = '';
+            voiceBtn.textContent = '🎤 Voice';
+        };
+
+        recognition.onerror = (event) => {
+            showError('Voice recognition error: ' + event.error);
+            isListening = false;
+        };
+
+        voiceBtn.addEventListener('click', () => {
+            if (!isListening) {
+                recognition.start();
+            } else {
+                recognition.stop();
+            }
+        });
+
+        toggleVoiceBtn.addEventListener('click', () => {
+            voiceEnabled = !voiceEnabled;
+            toggleVoiceBtn.textContent = voiceEnabled ? '🔊 Voice On' : '🔊 Voice Off';
+            toggleVoiceBtn.style.background = voiceEnabled ? '#2ecc71' : '#95a5a6';
+        });
+
+        function speakResponse(text) {
+            if (!voiceEnabled || !synth) return;
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 1;
+            utterance.pitch = 1;
+            utterance.volume = 1;
+            synth.cancel();
+            synth.speak(utterance);
+        }
 
         function showError(message) {
             errorDiv.textContent = message;
@@ -382,6 +449,7 @@
                 if (data.success) {
                     displayEmotion(data.tone);
                     displayMessage(data.response, 'ai');
+                    speakResponse(data.response);
                     updateStats();
                 } else {
                     showError('Error processing message');
