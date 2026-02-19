@@ -347,6 +347,13 @@
         let voiceEnabled = false;
         let isListening = false;
 
+        // Load voices when they become available
+        if (synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = () => {
+                synth.getVoices();
+            };
+        }
+
         recognition.continuous = false;
         recognition.interimResults = false;
         recognition.lang = 'en-US';
@@ -393,11 +400,27 @@
         function speakResponse(text) {
             if (!voiceEnabled || !synth) return;
 
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 1;
-            utterance.pitch = 1;
-            utterance.volume = 1;
+            // Cancel any ongoing speech
             synth.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            
+            // Try to use a natural-sounding voice
+            const voices = synth.getVoices();
+            if (voices.length > 0) {
+                // Prefer female voices for a more humanoid feel
+                const femaleVoice = voices.find(voice => voice.name.includes('Female') || voice.name.includes('woman'));
+                if (femaleVoice) {
+                    utterance.voice = femaleVoice;
+                } else {
+                    utterance.voice = voices[0];
+                }
+            }
+            
+            utterance.rate = 0.95; // Slightly slower for clarity
+            utterance.pitch = 1.1; // Slightly higher pitch
+            utterance.volume = 1;
+            
             synth.speak(utterance);
         }
 
