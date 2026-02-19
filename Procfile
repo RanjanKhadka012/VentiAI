@@ -1,1 +1,1 @@
-web: cd ventiAI && npm install && node backend/server.js
+web: cd ventiAI && node backend/server.js
