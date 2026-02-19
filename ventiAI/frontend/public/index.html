@@ -421,7 +421,22 @@
             utterance.pitch = 1.1; // Slightly higher pitch
             utterance.volume = 1;
             
-            synth.speak(utterance);
+            // Add error handling for speech synthesis
+            utterance.onerror = (event) => {
+                console.error('Speech synthesis error:', event.error);
+                showError('Voice error: ' + event.error);
+            };
+            
+            utterance.onend = () => {
+                console.log('Speech finished');
+            };
+            
+            try {
+                synth.speak(utterance);
+            } catch (error) {
+                console.error('Failed to speak:', error);
+                showError('Voice not available on this browser');
+            }
         }
 
         function showError(message) {
