@@ -19,7 +19,7 @@ const corsOptions = {
         if (!origin || whitelist.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
-            // In production (Railway), allow all origins
+            // In production (Railway), allow all origins since frontend is separate
             if (process.env.NODE_ENV === 'production') {
                 callback(null, true);
             } else {

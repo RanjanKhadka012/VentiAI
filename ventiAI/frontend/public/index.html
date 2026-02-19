@@ -328,6 +328,9 @@
     </div>
 
     <script>
+        // API Configuration
+        const API_BASE_URL = 'https://ventiai-production.up.railway.app';
+        
         const messageInput = document.getElementById('message');
         const messagesDiv = document.getElementById('messages');
         const statsDiv = document.getElementById('stats');
@@ -436,7 +439,7 @@
             showLoading(true);
 
             try {
-                const response = await fetch('/api/vent', {
+                const response = await fetch(`${API_BASE_URL}/api/vent`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message })
@@ -464,7 +467,7 @@
 
         async function updateStats() {
             try {
-                const response = await fetch('/api/stats');
+                const response = await fetch(`${API_BASE_URL}/api/stats`);
                 const stats = await response.json();
 
                 if (stats.totalConversations > 0) {
@@ -503,7 +506,7 @@
 
         async function loadHistory() {
             try {
-                const response = await fetch('/api/history');
+                const response = await fetch(`${API_BASE_URL}/api/history`);
                 const history = await response.json();
 
                 if (history.length === 0) {
@@ -527,7 +530,7 @@
             if (!confirm('Are you sure you want to clear all conversations?')) return;
 
             try {
-                const response = await fetch('/api/clear', { method: 'DELETE' });
+                const response = await fetch(`${API_BASE_URL}/api/clear`, { method: 'DELETE' });
                 const data = await response.json();
 
                 if (data.success) {
