@@ -1,1 +1,1 @@
-web: cd ventiAI && node backend/server.js
+web: node ventiAI/backend/server.js
