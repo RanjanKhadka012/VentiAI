@@ -8,12 +8,25 @@ const ventingApp = new VentingApp();
 // CORS configuration
 const cors = require('cors');
 const corsOptions = {
-    origin: [
-        'http://localhost:3000',
-        'http://localhost:5173',
-        'http://localhost:8000',
-        'https://venti-ai.vercel.app'
-    ],
+    origin: function (origin, callback) {
+        const whitelist = [
+            'http://localhost:3000',
+            'http://localhost:5173',
+            'http://localhost:8000',
+            'https://venti-ai.vercel.app'
+        ];
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin || whitelist.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            // In production (Railway), allow all origins
+            if (process.env.NODE_ENV === 'production') {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type']
