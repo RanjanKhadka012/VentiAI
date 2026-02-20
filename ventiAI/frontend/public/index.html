@@ -342,13 +342,25 @@
 
         // Speech Recognition and Synthesis
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new SpeechRecognition();
+        let recognition = null;
+        
+        // Check if browser supports Speech Recognition
+        if (!SpeechRecognition) {
+            console.warn('Speech Recognition not supported in this browser');
+            voiceBtn.disabled = true;
+            voiceBtn.title = 'Speech Recognition not supported. Use Chrome, Firefox, or Edge.';
+            voiceBtn.style.opacity = '0.5';
+            voiceBtn.style.cursor = 'not-allowed';
+        } else {
+            recognition = new SpeechRecognition();
+        }
+        
         const synth = window.speechSynthesis;
         let voiceEnabled = false;
         let isListening = false;
 
         // Load voices when they become available
-        if (synth.onvoiceschanged !== undefined) {
+        if (synth && synth.onvoiceschanged !== undefined) {
             synth.onvoiceschanged = () => {
                 const voices = synth.getVoices();
                 console.log(`Speech synthesis voices available: ${voices.length}`);
@@ -359,52 +371,61 @@
         }
         
         // Initial check for voices
-        const initialVoices = synth.getVoices();
-        console.log(`Initial speech synthesis voices: ${initialVoices.length}`);
+        if (synth) {
+            const initialVoices = synth.getVoices();
+            console.log(`Initial speech synthesis voices: ${initialVoices.length}`);
+        }
 
-        recognition.continuous = false;
-        recognition.interimResults = false;
-        recognition.lang = 'en-US';
+        if (recognition) {
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
 
-        recognition.onstart = () => {
-            isListening = true;
-            voiceBtn.style.background = '#e74c3c';
-            voiceBtn.textContent = '🎤 Listening...';
-        };
+            recognition.onstart = () => {
+                isListening = true;
+                voiceBtn.style.background = '#e74c3c';
+                voiceBtn.textContent = '🎤 Listening...';
+            };
 
-        recognition.onresult = (event) => {
-            let transcript = '';
-            for (let i = event.resultIndex; i < event.results.length; i++) {
-                transcript += event.results[i][0].transcript;
-            }
-            messageInput.value = transcript;
-        };
+            recognition.onresult = (event) => {
+                let transcript = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    transcript += event.results[i][0].transcript;
+                }
+                messageInput.value = transcript;
+            };
 
-        recognition.onend = () => {
-            isListening = false;
-            voiceBtn.style.background = '';
-            voiceBtn.textContent = '🎤 Voice';
-        };
+            recognition.onend = () => {
+                isListening = false;
+                voiceBtn.style.background = '';
+                voiceBtn.textContent = '🎤 Voice';
+            };
 
-        recognition.onerror = (event) => {
-            let errorMessage = 'Voice recognition error: ' + event.error;
-            
-            // Provide helpful messages for specific errors
-            if (event.error === 'not-allowed') {
-                errorMessage = '🔒 Microphone access denied. Allow microphone in browser settings or use Chrome/Firefox/Edge. (VS Code Simple Browser doesn\'t support microphone)';
-            } else if (event.error === 'network') {
-                errorMessage = '📡 Network error. Check your internet connection.';
-            } else if (event.error === 'no-speech') {
-                errorMessage = '🔇 No speech detected. Please try again.';
-            }
-            
-            showError(errorMessage);
-            isListening = false;
-            voiceBtn.style.background = '';
-            voiceBtn.textContent = '🎤 Voice';
-        };
+            recognition.onerror = (event) => {
+                let errorMessage = 'Voice recognition error: ' + event.error;
+                
+                // Provide helpful messages for specific errors
+                if (event.error === 'not-allowed') {
+                    errorMessage = '🔒 Microphone access denied. Allow microphone in browser settings or use Chrome/Firefox/Edge. (VS Code Simple Browser doesn\'t support microphone)';
+                } else if (event.error === 'network') {
+                    errorMessage = '📡 Network error. Check your internet connection.';
+                } else if (event.error === 'no-speech') {
+                    errorMessage = '🔇 No speech detected. Please try again.';
+                }
+                
+                showError(errorMessage);
+                isListening = false;
+                voiceBtn.style.background = '';
+                voiceBtn.textContent = '🎤 Voice';
+            };
+        }
 
         voiceBtn.addEventListener('click', () => {
+            if (!recognition) {
+                showError('Speech recognition not supported in this browser. Use Chrome, Firefox, or Edge.');
+                return;
+            }
+            
             console.log('Voice button clicked, isListening:', isListening);
             
             if (!isListening) {
