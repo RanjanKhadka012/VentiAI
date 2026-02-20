@@ -303,9 +303,9 @@
                     <label for="message" style="font-weight: 600; color: #333; margin-bottom: 5px;">What's on your mind?</label>
                     <textarea id="message" placeholder="Share your thoughts, feelings, or concerns... I'm here to listen."></textarea>
                     <div style="display: flex; gap: 10px; margin-top: 10px;">
-                        <button class="btn-send" onclick="sendMessage()">Send</button>
-                        <button class="btn-send" id="voiceBtn" style="flex: 0 0 auto;">🎤 Voice</button>
-                        <button class="btn-send" id="toggleVoice" style="flex: 0 0 auto; background: #95a5a6;">🔊 Voice Off</button>
+                        <button class="btn-send" onclick="sendMessage()" title="Send your message">Send</button>
+                        <button class="btn-send" id="voiceBtn" style="flex: 0 0 auto;" title="Click to speak (Chrome/Edge only). Message auto-submits when done.">🎤 Voice</button>
+                        <button class="btn-send" id="toggleVoice" style="flex: 0 0 auto; background: #95a5a6;" title="Toggle AI voice responses on/off">🔊 Voice Off</button>
                     </div>
                 </div>
 
@@ -348,7 +348,7 @@
         if (!SpeechRecognition) {
             console.warn('Speech Recognition not supported in this browser');
             voiceBtn.disabled = true;
-            voiceBtn.title = 'Speech Recognition not supported. Use Chrome, Firefox, or Edge.';
+            voiceBtn.title = '🔒 Voice input not supported in this browser. Use Chrome, Firefox, or Edge. (Text-to-speech still works!)';
             voiceBtn.style.opacity = '0.5';
             voiceBtn.style.cursor = 'not-allowed';
         } else {
@@ -399,6 +399,12 @@
                 isListening = false;
                 voiceBtn.style.background = '';
                 voiceBtn.textContent = '🎤 Voice';
+                
+                // Auto-submit if there's a message captured
+                if (messageInput.value.trim()) {
+                    console.log('Auto-submitting voice message...');
+                    setTimeout(() => sendMessage(), 500);
+                }
             };
 
             recognition.onerror = (event) => {
