@@ -77,10 +77,14 @@ class StorageManager {
 
     _getRecords() {
         if (typeof window === "undefined") {
-            return this.storage[this.storageKey] || [];
+            // Server-side: return array from object storage
+            const records = this.storage[this.storageKey];
+            return Array.isArray(records) ? records : [];
         } else {
+            // Client-side: return array from localStorage
             const data = localStorage.getItem(this.storageKey);
-            return data ? JSON.parse(data) : [];
+            const records = data ? JSON.parse(data) : [];
+            return Array.isArray(records) ? records : [];
         }
     }
 

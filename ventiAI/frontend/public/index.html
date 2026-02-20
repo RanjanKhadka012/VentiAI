@@ -603,6 +603,12 @@
                 const response = await fetch(`${API_BASE_URL}/api/history`);
                 const history = await response.json();
 
+                // Ensure history is an array
+                if (!Array.isArray(history)) {
+                    showError('Invalid history format received from server');
+                    return;
+                }
+
                 if (history.length === 0) {
                     alert('No conversation history yet.');
                     return;
@@ -616,7 +622,8 @@
 
                 alert(historyText);
             } catch (error) {
-                showError('Error loading history');
+                console.error('Error loading history:', error);
+                showError('Error loading history: ' + error.message);
             }
         }
 
