@@ -350,9 +350,17 @@
         // Load voices when they become available
         if (synth.onvoiceschanged !== undefined) {
             synth.onvoiceschanged = () => {
-                synth.getVoices();
+                const voices = synth.getVoices();
+                console.log(`Speech synthesis voices available: ${voices.length}`);
+                voices.forEach((voice, index) => {
+                    console.log(`Voice ${index}: ${voice.name} (${voice.lang})`);
+                });
             };
         }
+        
+        // Initial check for voices
+        const initialVoices = synth.getVoices();
+        console.log(`Initial speech synthesis voices: ${initialVoices.length}`);
 
         recognition.continuous = false;
         recognition.interimResults = false;
@@ -405,16 +413,21 @@
             
             const utterance = new SpeechSynthesisUtterance(text);
             
-            // Try to use a natural-sounding voice
+            // Ensure voices are loaded before using them
             const voices = synth.getVoices();
-            if (voices.length > 0) {
-                // Prefer female voices for a more humanoid feel
-                const femaleVoice = voices.find(voice => voice.name.includes('Female') || voice.name.includes('woman'));
-                if (femaleVoice) {
-                    utterance.voice = femaleVoice;
-                } else {
-                    utterance.voice = voices[0];
-                }
+            if (voices.length === 0) {
+                console.warn('No voices available, waiting for voices to load...');
+                // Wait for voices to load and try again
+                setTimeout(() => speakResponse(text), 500);
+                return;
+            }
+            
+            // Try to use a natural-sounding voice
+            const femaleVoice = voices.find(voice => voice.name.includes('Female') || voice.name.includes('woman'));
+            if (femaleVoice) {
+                utterance.voice = femaleVoice;
+            } else {
+                utterance.voice = voices[0];
             }
             
             utterance.rate = 0.95; // Slightly slower for clarity
