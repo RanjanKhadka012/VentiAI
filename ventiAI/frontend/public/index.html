@@ -408,15 +408,20 @@
             };
 
             recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
                 let errorMessage = 'Voice recognition error: ' + event.error;
                 
                 // Provide helpful messages for specific errors
                 if (event.error === 'not-allowed') {
-                    errorMessage = '🔒 Microphone access denied. Allow microphone in browser settings or use Chrome/Firefox/Edge. (VS Code Simple Browser doesn\'t support microphone)';
+                    errorMessage = '🔒 Microphone access denied. Allow microphone in browser settings or try again.';
                 } else if (event.error === 'network') {
                     errorMessage = '📡 Network error. Check your internet connection.';
                 } else if (event.error === 'no-speech') {
-                    errorMessage = '🔇 No speech detected. Please try again.';
+                    errorMessage = '🔇 No speech detected. Make sure:\n1. Your microphone is working\n2. You\'re speaking loud enough\n3. Microphone permission is allowed\n4. Try again!';
+                } else if (event.error === 'audio-capture') {
+                    errorMessage = '🎤 Microphone not found or not working. Check your audio device.';
+                } else if (event.error === 'service-not-allowed') {
+                    errorMessage = '⚠️ Speech recognition service not allowed. Check browser settings.';
                 }
                 
                 showError(errorMessage);
@@ -437,7 +442,16 @@
             if (!isListening) {
                 try {
                     console.log('Starting speech recognition...');
-                    recognition.start();
+                    // Request microphone permission
+                    navigator.mediaDevices.getUserMedia({ audio: true })
+                        .then(() => {
+                            console.log('Microphone permission granted');
+                            recognition.start();
+                        })
+                        .catch((error) => {
+                            console.error('Microphone permission denied:', error);
+                            showError('🔒 Microphone permission denied. Please allow microphone access in your browser settings and try again.');
+                        });
                 } catch (error) {
                     console.error('Failed to start recognition:', error);
                     showError('Could not start voice recognition: ' + error.message);
