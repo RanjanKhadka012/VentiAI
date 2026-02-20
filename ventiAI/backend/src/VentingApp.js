@@ -43,6 +43,22 @@ class VentingApp {
 
     getStatistics() {
         const records = this.storage.getAllRecords();
+        
+        // Ensure records is an array
+        if (!Array.isArray(records)) {
+            return {
+                totalConversations: 0,
+                emotionBreakdown: {
+                    sadness: 0,
+                    stress: 0,
+                    anger: 0,
+                    happiness: 0,
+                    neutral: 0
+                },
+                lastConversation: null
+            };
+        }
+        
         const stats = {
             totalConversations: records.length,
             emotionBreakdown: {
@@ -56,7 +72,7 @@ class VentingApp {
         };
 
         records.forEach(record => {
-            if (stats.emotionBreakdown.hasOwnProperty(record.emotion)) {
+            if (record && record.emotion && stats.emotionBreakdown.hasOwnProperty(record.emotion)) {
                 stats.emotionBreakdown[record.emotion]++;
             }
         });

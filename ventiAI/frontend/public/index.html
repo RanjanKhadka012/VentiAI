@@ -564,37 +564,47 @@
                 const response = await fetch(`${API_BASE_URL}/api/stats`);
                 const stats = await response.json();
 
+                // Validate stats object structure
+                if (!stats || typeof stats !== 'object') {
+                    console.error('Invalid stats format:', stats);
+                    return;
+                }
+
                 if (stats.totalConversations > 0) {
+                    // Safely access emotionBreakdown with fallback
+                    const emotionBreakdown = stats.emotionBreakdown || {};
+                    
                     statsDiv.classList.add('show');
                     statsGrid.innerHTML = `
                         <div class="stat-item">
                             <div class="stat-label">Total Vents</div>
-                            <div class="stat-value">${stats.totalConversations}</div>
+                            <div class="stat-value">${stats.totalConversations || 0}</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-label">😢 Sadness</div>
-                            <div class="stat-value">${stats.emotionBreakdown.sadness}</div>
+                            <div class="stat-value">${emotionBreakdown.sadness || 0}</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-label">😰 Stress</div>
-                            <div class="stat-value">${stats.emotionBreakdown.stress}</div>
+                            <div class="stat-value">${emotionBreakdown.stress || 0}</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-label">😠 Anger</div>
-                            <div class="stat-value">${stats.emotionBreakdown.anger}</div>
+                            <div class="stat-value">${emotionBreakdown.anger || 0}</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-label">😊 Happy</div>
-                            <div class="stat-value">${stats.emotionBreakdown.happiness}</div>
+                            <div class="stat-value">${emotionBreakdown.happiness || 0}</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-label">😐 Neutral</div>
-                            <div class="stat-value">${stats.emotionBreakdown.neutral}</div>
+                            <div class="stat-value">${emotionBreakdown.neutral || 0}</div>
                         </div>
                     `;
                 }
             } catch (error) {
                 console.error('Error updating stats:', error);
+                showError('Error loading statistics');
             }
         }
 
