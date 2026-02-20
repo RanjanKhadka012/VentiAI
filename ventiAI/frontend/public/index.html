@@ -405,9 +405,18 @@
         };
 
         voiceBtn.addEventListener('click', () => {
+            console.log('Voice button clicked, isListening:', isListening);
+            
             if (!isListening) {
-                recognition.start();
+                try {
+                    console.log('Starting speech recognition...');
+                    recognition.start();
+                } catch (error) {
+                    console.error('Failed to start recognition:', error);
+                    showError('Could not start voice recognition: ' + error.message);
+                }
             } else {
+                console.log('Stopping speech recognition...');
                 recognition.stop();
             }
         });
