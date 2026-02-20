@@ -1,0 +1,39 @@
+{
+  "affirmation_database": [
+    {
+      "category": "Anxious",
+      "keywords": ["stressed", "panicking", "worried", "scared", "overwhelmed", "shaking", "racing", "uneasy", "on edge", "suffocating", "jittery", "frantic", "drowning", "hectic", "cluttered", "frozen", "spiraling", "tightness", "nervous", "apprehensive"],
+      "response_paragraph": "I want you to take a deep breath right now and remember that you do not have to figure out your entire future in this single moment. It is perfectly okay to slow down and focus only on the very next tiny step in front of you. You are safe right now, and you possess the inner strength to handle whatever challenges come your way today with grace."
+    },
+    {
+      "category": "Sad",
+      "keywords": ["lonely", "depressed", "blue", "empty", "hollow", "heartbroken", "crying", "isolated", "unloved", "heavy", "rejected", "invisible", "ignored", "disconnected", "miserable", "sorrowful", "down", "gloomy", "withdrawn", "unhappy"],
+      "response_paragraph": "It is completely valid to feel this way, and I want you to know that your presence in this world truly matters more than you can see. Even when it feels like you are alone, you are worthy of deep connection and unconditional love. Please be gentle with yourself today; you deserve the same kindness and compassion that you so freely give to others every single day."
+    },
+    {
+      "category": "Angry",
+      "keywords": ["furious", "mad", "annoyed", "frustrated", "betrayed", "pissed", "unfair", "exploding", "irritated", "bitter", "aggravated", "resentful", "hostile", "enraged", "offended", "spiteful", "fuming", "outraged", "agitated", "disrespected"],
+      "response_paragraph": "Your feelings are a powerful signal that something is not right, and it is okay to feel this heat rising within you. You are allowed to protect your energy and set firm boundaries to maintain your peace of mind. Remember that you have the power to respond with intention rather than reacting in a way that drains your spirit further or causes you more pain later."
+    },
+    {
+      "category": "Doubtful",
+      "keywords": ["failure", "stupid", "worthless", "mistake", "regret", "ashamed", "embarrassed", "not enough", "guilty", "messing up", "insecure", "impostor", "incapable", "flawed", "useless", "unworthy", "disappointed", "clumsy", "ashamed", "pitiful"],
+      "response_paragraph": "Please release the heavy burden of trying to be perfect, because being a work in progress is a beautiful and natural part of the human experience. Making a mistake does not define your character or your future potential in any way. You are doing the best you can with the tools you have right now, and that is more than enough to be worthy of love."
+    },
+    {
+      "category": "Exhausted",
+      "keywords": ["burnt out", "drained", "tired", "fatigued", "wiped", "done", "can't go on", "zombie", "empty", "foggy", "spent", "unmotivated", "lethargic", "weary", "overworked", "listless", "sleepy", "broken", "weak", "finished"],
+      "response_paragraph": "You have been carrying so much weight lately, and it is finally time to give yourself permission to simply rest without any lingering guilt. Your worth is not measured by your productivity or how much you get done in a day. Taking a break is not a sign of weakness; it is a necessary act of survival and deep self-respect for your mind and body."
+    },
+    {
+      "category": "Positive",
+      "keywords": ["excited", "happy", "nailed it", "grateful", "thankful", "relief", "peaceful", "proud", "better", "stronger", "inspired", "blessed", "joyful", "content", "wonderful", "successful", "confident", "thriving", "optimistic", "radiant"],
+      "response_paragraph": "I am so incredibly proud of the progress you have made and the resilience you have shown to get to this point. You are the architect of your own happiness, and seeing your growth is truly inspiring to everyone around you. Continue to trust your journey and celebrate these wins, because you deserve every bit of joy and success that is coming your way right now."
+    },
+    {
+      "category": "Neutral",
+      "keywords": ["okay", "fine", "normal", "average", "unsure", "thinking", "maybe", "neutral", "alright", "checking in"],
+      "response_paragraph": "Thank you for sharing your thoughts and taking the time to check in with yourself today. It is important to acknowledge where you are, even if the feelings aren't intense or clearly defined. Whatever you are experiencing right now is a valid part of your journey, and I am here to listen whenever you need a moment of reflection or a few words of support."
+    }
+  ]
+}

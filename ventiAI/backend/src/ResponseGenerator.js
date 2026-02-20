@@ -1,3 +1,5 @@
+const affirmationsData = require('./affirmations.json');
+
 class ResponseGenerator {
     constructor() {
         this.responses = {
@@ -32,9 +34,33 @@ class ResponseGenerator {
                 "I'm truly listening, and I want you to know that your words matter to me. Please, tell me more about what you're experiencing. Your story is important, and I'm honored that you're sharing it with me. I'm genuinely interested in understanding your perspective and what's happening in your world. Your thoughts, feelings, and experiences are valuable, and I want to support you fully. Don't hesitate to express yourself fully. I'm here for all of it."
             ]
         };
+
+        // Map emotions to affirmation categories
+        this.emotionToCategory = {
+            'stress': 'Anxious',
+            'sadness': 'Sad',
+            'anger': 'Angry',
+            'happiness': 'Positive',
+            'neutral': 'Neutral'
+        };
     }
 
     generateResponse(tone) {
+        try {
+            // Try to get affirmation first
+            const category = this.emotionToCategory[tone] || 'Neutral';
+            const affirmation = affirmationsData.affirmation_database.find(
+                item => item.category === category
+            );
+            
+            if (affirmation && affirmation.response_paragraph) {
+                return affirmation.response_paragraph;
+            }
+        } catch (error) {
+            console.error('Error loading affirmation:', error);
+        }
+        
+        // Fallback to existing responses
         const responseList = this.responses[tone] || this.responses.neutral;
         const randomIndex = Math.floor(Math.random() * responseList.length);
         return responseList[randomIndex];
