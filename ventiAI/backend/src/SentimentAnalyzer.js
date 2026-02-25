@@ -2,10 +2,10 @@ class SentimentAnalyzer {
     constructor() {
         this.emotionalTone = "";
         this.sentimentMap = {
-            sadness: ["sad", "depressed", "unhappy", "miserable", "heartbroken", "lonely", "empty"],
-            stress: ["stressed", "overwhelmed", "anxious", "nervous", "worried", "tense"],
-            anger: ["angry", "furious", "mad", "irritated", "annoyed", "frustrated"],
-            happiness: ["happy", "excited", "joyful", "great", "wonderful", "amazing"],
+            sadness: ["sad", "depressed", "unhappy", "miserable", "heartbroken", "lonely", "empty", "sorry", "grief", "sorrow", "despair", "hopeless", "hopelessness", "crying", "cry", "tears", "blue", "down", "awful", "terrible", "horrible", "worst", "losing", "loss", "lost", "broken", "shattered", "devastated", "devastation", "hurt", "hurting", "pain", "ache", "aching"],
+            stress: ["stressed", "overwhelmed", "anxious", "nervous", "worried", "tense", "panic", "panicked", "pressure", "burden", "struggling", "struggle", "difficulty", "difficult", "hard", "challenging", "challenge", "turbulent", "chaotic", "chaos", "confusion", "confused", "scatter", "scattered", "torn", "ripped", "exhausted", "exhaustion", "tired", "fatigue", "worn out"],
+            anger: ["angry", "furious", "mad", "irritated", "annoyed", "frustrated", "punching", "rage", "livid", "incensed", "enraged", "hate", "hateful", "despise", "bitter", "bitterness", "resentful", "resentment", "upset", "agitated", "aggravated", "pissed", "pissed off", "fed up", "fed-up", "sick of", "sick", "furore", "furor", "indignant", "indignation", "outraged", "outrage", "hostile", "vicious", "violent", "violence", "hit", "punch", "kick", "smash", "break", "destroy", "yelling", "yell", "scream", "screaming", "shout", "shouting", "aggressive", "aggression"],
+            happiness: ["happy", "excited", "joyful", "great", "wonderful", "amazing", "fantastic", "excellent", "excellent", "love", "loved", "loving", "blessed", "grateful", "gratitude", "thankful", "thanks", "appreciation", "appreciate", "proud", "pride", "proud", "calm", "peace", "peaceful", "content", "contentment", "satisfied", "satisfied", "proud", "honored", "delighted", "delightful", "joy", "bliss", "blissful", "perfect", "beautiful", "beauty", "awesome", "awesome", "superb", "outstanding", "thrilled", "elated", "cheerful"],
             neutral: []
         };
     }
